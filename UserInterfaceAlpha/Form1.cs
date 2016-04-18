@@ -31,7 +31,7 @@ namespace UserInterfaceAlpha
 //			DrawFile_Ronly(SourceFile, width, height, 2, 0, image => { bgWorker.ReportProgress(0, image); });
 //			DrawFile_RandG(SourceFile, width, height, 2, 0, image => { bgWorker.ReportProgress(0, image); });
 //			DrawFile_RandG(SourceFile, width, height, 12, 1, image => { bgWorker.ReportProgress(0, image); });
-			DrawFile_RandG(SourceFile, width, height, 10, 1, image => { _bgWorker.ReportProgress(0, image); });
+			DrawFile_RandG(SourceFile, width, height, 9, 1, image => { _bgWorker.ReportProgress(0, image); });
 //			DrawFile_RandG(SourceFile, width, height, 1, 0, image => { bgWorker.ReportProgress(0, image); });
 //			DrawFile_RandG(SourceFile, width, height, 12, 0, image => { bgWorker.ReportProgress(0, image); });
 		}
@@ -58,7 +58,6 @@ namespace UserInterfaceAlpha
 		private const int PauseMilliseconds = 100;
 		private const int PopulatedR = 0xF0;
 		private const int PopulatedG = 0x0F;
-		//const int Empty = EmptyR | EmptyG;
 		// todo: EOF marker?
 
 		private void DrawFile_RandG(string filename, int width, int height, int dotSize, int borderSize, Action<Image> progress)
@@ -71,8 +70,8 @@ namespace UserInterfaceAlpha
 
 			var horizDots = Math.Floor((dWidth - borderSize)/dotWithBorder);
 			var vertDots = Math.Floor((dHeight - borderSize)/dotWithBorder);
-			var unitsPerImage = (int) (horizDots*vertDots);
-			unitsPerImage *= 2; // 2 channels (Red & Green)
+			var valuesPerImage = (int) (horizDots*vertDots);
+			valuesPerImage *= 2; // 2 channels (Red & Green)
 
 			var dotBrush = new SolidBrush(Color.Transparent); // initial
 
@@ -81,8 +80,8 @@ namespace UserInterfaceAlpha
 				int readCount;
 				do
 				{
-					var buffer = new byte[unitsPerImage];
-					readCount = reader.Read(buffer, 0, unitsPerImage);
+					var buffer = new byte[valuesPerImage];
+					readCount = reader.Read(buffer, 0, valuesPerImage);
 					//readCount = Math.Min(readCount, 2000);
 
 					if (readCount > 0)
