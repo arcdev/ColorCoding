@@ -10,11 +10,39 @@ namespace ParseConsole
 
 		static void Main(string[] args)
 		{
-			Parse(SourceFile, TargetFile);
+			ParseRG(SourceFile, TargetFile);
 			//System.Console.Read();
 		}
 
-		private static void Parse(string source, string target)
+		const int PopulatedR = 0xF0;
+		const int PopulatedG = 0x0F;
+
+		//TODO: support dot size
+		//TODO: strip each layer (R & G)
+
+
+		private static void ParseRG(string source, string target, int dotSize, int borderSize)
+		{
+			using (var writer = File.OpenWrite(target))
+			{
+				var img = (Bitmap) Image.FromFile(source);
+				for (var y = 0; y < img.Height; y++)
+				{
+					for (var x = 0; x < img.Width; x++)
+					{
+						var color = img.GetPixel(x, y);
+						if (color.B == 240)
+						{
+							break;
+						}
+						var b = color.R;
+						writer.WriteByte(b);
+					}
+				}
+			}
+		}
+
+		private static void ParseR(string source, string target)
 		{
 			using (var writer = File.OpenWrite(target))
 			{
